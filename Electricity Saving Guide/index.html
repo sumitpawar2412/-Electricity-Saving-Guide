@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Electricity Saving Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0f1e;
+    --surface: #111827;
+    --surface2: #1a2335;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.15);
+    --accent: #00e5a0;
+    --accent2: #7c6ff7;
+    --accent3: #ff6b6b;
+    --text: #f0f4ff;
+    --muted: #6b7a99;
+    --card-radius: 20px;
+    --inner-radius: 12px;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background glow effects */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -200px; left: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(0,229,160,0.06) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(124,111,247,0.07) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 52px;
+  }
+
+  .header .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0,229,160,0.1);
+    border: 1px solid rgba(0,229,160,0.25);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+  }
+
+  .header .badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: inline-block;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #fff 30%, rgba(255,255,255,0.6));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 14px;
+  }
+
+  .header p {
+    color: var(--muted);
+    font-size: 16px;
+    font-weight: 300;
+    max-width: 400px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--card-radius);
+    padding: 32px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .card:hover { border-color: var(--border-hover); }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  }
+
+  .section-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Grid inputs */
+  .inputs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .field label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .field input, .field select {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--inner-radius);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    padding: 13px 16px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+    outline: none;
+    -webkit-appearance: none;
+  }
+
+  .field input:focus, .field select:focus {
+    border-color: rgba(0,229,160,0.4);
+    box-shadow: 0 0 0 3px rgba(0,229,160,0.07);
+  }
+
+  .field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7a99' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+
+  /* Device grid */
+  .devices-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .device-item {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--inner-radius);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    transition: border-color 0.2s, background 0.2s;
+    cursor: default;
+  }
+
+  .device-item:hover { border-color: var(--border-hover); background: rgba(255,255,255,0.02); }
+  .device-item.active { border-color: rgba(0,229,160,0.35); background: rgba(0,229,160,0.04); }
+
+  .device-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .device-icon {
+    width: 34px; height: 34px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    background: var(--surface2);
+  }
+
+  .device-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .device-watts {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+
+  .device-qty {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: var(--surface2);
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .qty-btn {
+    width: 28px; height: 28px;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s, background 0.15s;
+    line-height: 1;
+  }
+
+  .qty-btn:hover { color: var(--text); background: rgba(255,255,255,0.08); }
+
+  .qty-val {
+    width: 28px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    user-select: none;
+  }
+
+  /* Run button */
+  .run-btn {
+    width: 100%;
+    padding: 17px;
+    border-radius: 14px;
+    border: none;
+    background: linear-gradient(135deg, #00e5a0, #00c085);
+    color: #001a10;
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+    position: relative;
+    overflow: hidden;
+    margin-top: 24px;
+  }
+
+  .run-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+  }
+
+  .run-btn:hover { transform: translateY(-1px); box-shadow: 0 12px 30px rgba(0,229,160,0.3); filter: brightness(1.05); }
+  .run-btn:active { transform: translateY(0); box-shadow: none; }
+
+  /* Results */
+  #result { display: none; }
+  #result.visible { display: block; }
+
+  .current-bill-card {
+    background: linear-gradient(135deg, #1a2335, #111827);
+    border: 1px solid rgba(0,229,160,0.2);
+    border-radius: var(--card-radius);
+    padding: 32px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .current-bill-card::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(0,229,160,0.08), transparent 70%);
+  }
+
+  .bill-label {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .bill-amount {
+    font-family: 'Syne', sans-serif;
+    font-size: 42px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+  }
+
+  .bill-units {
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 300;
+    margin-top: 4px;
+  }
+
+  /* Algorithm cards */
+  .algo-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .algo-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--card-radius);
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.25s, transform 0.25s;
+    animation: slideUp 0.4s ease backwards;
+  }
+
+  .algo-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+
+  .algo-card.best {
+    border-color: rgba(0,229,160,0.3);
+    background: linear-gradient(135deg, rgba(0,229,160,0.04), var(--surface));
+  }
+
+  .algo-card.best::after {
+    content: 'Best Savings';
+    position: absolute;
+    top: 16px; right: 16px;
+    background: rgba(0,229,160,0.15);
+    border: 1px solid rgba(0,229,160,0.3);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .algo-card:nth-child(1) { animation-delay: 0.05s; }
+  .algo-card:nth-child(2) { animation-delay: 0.12s; }
+  .algo-card:nth-child(3) { animation-delay: 0.19s; }
+
+  .algo-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .algo-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 3px;
+  }
+
+  .algo-desc {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .algo-savings {
+    text-align: right;
+  }
+
+  .savings-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 3px;
+  }
+
+  .savings-amount {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  /* Stats row */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .stat-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    text-align: center;
+  }
+
+  .stat-box .s-label {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+
+  .stat-box .s-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .stat-box .s-val.green { color: var(--accent); }
+  .stat-box .s-val.purple { color: var(--accent2); }
+
+  /* Recommendations */
+  .reco-title {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .reco-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .reco-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 9px 14px;
+    font-size: 13px;
+    color: var(--text);
+    transition: border-color 0.2s;
+  }
+
+  .reco-item:hover { border-color: var(--border-hover); }
+
+  .reco-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .reco-hrs {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 600;
+    font-family: 'Syne', sans-serif;
+    white-space: nowrap;
+  }
+
+  /* Divider */
+  hr { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+
+  /* Responsive */
+  @media (max-width: 580px) {
+    .inputs-grid { grid-template-columns: 1fr; }
+    .devices-grid { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .current-bill-card { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="badge">Smart Energy Optimizer</div>
+    <h1>Electricity<br>Saving Guide</h1>
+    <p>Analyze your usage, hit your target slab, and save money every month.</p>
+  </div>
+
+  <!-- Input Card -->
+  <div class="card">
+    <div class="section-label">Consumption Details</div>
+    <div class="inputs-grid">
+      <div class="field">
+        <label>Current Units (Monthly)</label>
+        <input type="number" id="units" placeholder="e.g. 350" min="0">
+      </div>
+      <div class="field">
+        <label>Target Slab</label>
+        <select id="slab">
+          <option value="100">Below 100 units</option>
+          <option value="200">101 – 200 units</option>
+          <option value="300">201 – 300 units</option>
+          <option value="400" selected>301 – 400 units</option>
+          <option value="500">401 – 500 units</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Devices Card -->
+  <div class="card">
+    <div class="section-label">Your Appliances</div>
+    <div class="devices-grid" id="devices-grid"></div>
+  </div>
+
+  <!-- Button -->
+  <button class="run-btn" onclick="run()">⚡ Optimize My Bill</button>
+
+  <!-- Result -->
+  <div id="result">
+    <div style="margin-top:36px;">
+      <div class="current-bill-card" id="current-bill-card"></div>
+      <div class="algo-grid" id="algo-grid"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const DEVICES = [
+  { name: "AC",              icon: "❄️", watts: "3.5 kWh", unitPerHour: 3.5, maxHours: 60 },
+  { name: "Fan",             icon: "🌀", watts: "0.1 kWh", unitPerHour: 1,   maxHours: 120 },
+  { name: "TV",              icon: "📺", watts: "0.2 kWh", unitPerHour: 2,   maxHours: 80 },
+  { name: "Geyser",          icon: "🚿", watts: "4.0 kWh", unitPerHour: 4,   maxHours: 30 },
+  { name: "Refrigerator",    icon: "🧊", watts: "1.5 kWh", unitPerHour: 1.5, maxHours: 50 },
+  { name: "Washing Machine", icon: "🫧", watts: "2.0 kWh", unitPerHour: 2,   maxHours: 20 },
+  { name: "Microwave",       icon: "🔆", watts: "3.0 kWh", unitPerHour: 3,   maxHours: 10 },
+  { name: "Iron",            icon: "👕", watts: "2.2 kWh", unitPerHour: 2.2, maxHours: 10 },
+  { name: "Laptop",          icon: "💻", watts: "0.2 kWh", unitPerHour: 0.2, maxHours: 100 },
+  { name: "Lights",          icon: "💡", watts: "0.5 kWh", unitPerHour: 0.5, maxHours: 150 },
+];
+
+const quantities = {};
+DEVICES.forEach(d => quantities[d.name] = 0);
+
+function renderDevices() {
+  const grid = document.getElementById('devices-grid');
+  grid.innerHTML = '';
+  DEVICES.forEach(d => {
+    const item = document.createElement('div');
+    item.className = 'device-item';
+    item.id = `dev-${d.name.replace(/\s/g,'-')}`;
+    item.innerHTML = `
+      <div class="device-info">
+        <div class="device-icon">${d.icon}</div>
+        <div>
+          <div class="device-name">${d.name}</div>
+          <div class="device-watts">${d.watts}/hr</div>
+        </div>
+      </div>
+      <div class="device-qty">
+        <button class="qty-btn" onclick="changeQty('${d.name}',-1)">−</button>
+        <div class="qty-val" id="qty-${d.name.replace(/\s/g,'-')}">0</div>
+        <button class="qty-btn" onclick="changeQty('${d.name}',1)">+</button>
+      </div>
+    `;
+    grid.appendChild(item);
+  });
+}
+
+function changeQty(name, delta) {
+  quantities[name] = Math.max(0, quantities[name] + delta);
+  const id = name.replace(/\s/g, '-');
+  document.getElementById(`qty-${id}`).textContent = quantities[name];
+  const item = document.getElementById(`dev-${id}`);
+  item.classList.toggle('active', quantities[name] > 0);
+}
+
+function calculateBill(u) {
+  let bill = 0, units = u;
+  if(units > 500){ bill += (units-500)*15; units=500; }
+  if(units > 400){ bill += (units-400)*12; units=400; }
+  if(units > 300){ bill += (units-300)*10; units=300; }
+  if(units > 200){ bill += (units-200)*8;  units=200; }
+  if(units > 100){ bill += (units-100)*5;  units=100; }
+  bill += units * 3;
+  return bill;
+}
+
+function getSelected() {
+  return DEVICES.filter(d => quantities[d.name] > 0).map(d => ({
+    name: d.name, qty: quantities[d.name], unitPerHour: d.unitPerHour, maxHours: d.maxHours
+  }));
+}
+
+function build(name, desc, combo, current, target) {
+  const saved = combo.reduce((s, x) => s + x.unit * x.hrs, 0);
+  return {
+    name, desc, combo,
+    saved: Math.round(saved),
+    target,
+    before: calculateBill(current),
+    after: calculateBill(Math.max(0, current - saved)),
+    moneySaved: calculateBill(current) - calculateBill(Math.max(0, current - saved))
+  };
+}
+
+function algoGreedy(selected, current, target) {
+  const need = current - target;
+  const arr = selected.slice().sort((a,b) => (b.unitPerHour * b.qty) - (a.unitPerHour * a.qty));
+  let saved = 0;
+  const combo = [];
+  for (const d of arr) {
+    if (saved >= need) break;
+    const unitsPerHour = d.unitPerHour * d.qty;
+    const hrsNeeded = Math.min(Math.ceil((need - saved) / unitsPerHour), d.maxHours);
+    if (hrsNeeded > 0) { combo.push({ name: d.name, unit: unitsPerHour, hrs: hrsNeeded }); saved += unitsPerHour * hrsNeeded; }
+  }
+  return build("Greedy Cut", "Targets highest-consumption devices first", combo, current, target);
+}
+
+function algoBalanced(selected, current, target) {
+  const need = current - target;
+  let saved = 0, i = 0;
+  const tally = {};
+  selected.forEach(d => tally[d.name] = 0);
+  while (saved < need && i < 10000) {
+    const d = selected[i % selected.length];
+    if (tally[d.name] < d.maxHours) {
+      const u = d.unitPerHour * d.qty;
+      tally[d.name]++;
+      saved += u;
+    }
+    i++;
+  }
+  const combo = Object.entries(tally).filter(([,v]) => v > 0).map(([k,v]) => {
+    const d = selected.find(x=>x.name===k);
+    return { name: k, unit: d.unitPerHour * d.qty, hrs: v };
+  });
+  return build("Balanced Cut", "Distributes reduction evenly across all devices", combo, current, target);
+}
+
+function algoPriority(selected, current, target) {
+  const need = current - target;
+  const arr = selected.slice().sort((a,b) => (b.unitPerHour * b.qty) - (a.unitPerHour * a.qty));
+  const tally = {};
+  selected.forEach(d => tally[d.name] = 0);
+  let saved = 0, i = 0;
+  while (saved < need && i < 10000) {
+    const d = arr[i % arr.length];
+    if (tally[d.name] < d.maxHours) {
+      tally[d.name]++;
+      saved += d.unitPerHour * d.qty;
+    }
+    i++;
+  }
+  const combo = Object.entries(tally).filter(([,v]) => v > 0).map(([k,v]) => {
+    const d = selected.find(x=>x.name===k);
+    return { name: k, unit: d.unitPerHour * d.qty, hrs: v };
+  });
+  return build("Priority Mix", "Focuses on high-impact devices with usage limits", combo, current, target);
+}
+
+const algoDescs = {
+  "Greedy Cut": "Aggressively cuts the biggest energy consumers first",
+  "Balanced Cut": "Spreads cuts across all devices for minimal lifestyle disruption",
+  "Priority Mix": "Smart weighting of high-impact vs low-impact devices"
+};
+
+function run() {
+  const current = Number(document.getElementById('units').value);
+  const slab = Number(document.getElementById('slab').value);
+
+  if (!current || current <= 0) { alert("Please enter your current monthly units."); return; }
+  if (current <= slab) { alert(`Your usage (${current} units) is already within the ${slab}-unit slab.`); return; }
+
+  const selected = getSelected();
+  if (selected.length === 0) { alert("Please select at least one appliance."); return; }
+
+  const t1 = slab - 1;
+  const t2 = Math.max(slab - 30, 1);
+  const t3 = Math.max(slab - 60, 1);
+
+  let results = [
+    algoGreedy(selected, current, t1),
+    algoBalanced(selected, current, t2),
+    algoPriority(selected, current, t3)
+  ];
+
+  results.sort((a,b) => b.moneySaved - a.moneySaved);
+
+  // Current bill banner
+  const billCard = document.getElementById('current-bill-card');
+  billCard.innerHTML = `
+    <div>
+      <div class="bill-label">Current Monthly Bill</div>
+      <div class="bill-amount">₹${calculateBill(current).toLocaleString()}</div>
+      <div class="bill-units">${current} units consumed</div>
+    </div>
+    <div style="text-align:right">
+      <div class="bill-label">Target Slab</div>
+      <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--accent2)">≤${slab} units</div>
+      <div class="bill-units">₹${calculateBill(slab).toLocaleString()} target bill</div>
+    </div>
+  `;
+
+  // Algorithm cards
+  const algoGrid = document.getElementById('algo-grid');
+  algoGrid.innerHTML = '';
+
+  results.forEach((r, idx) => {
+    const card = document.createElement('div');
+    card.className = 'algo-card' + (idx === 0 ? ' best' : '');
+    card.style.animationDelay = `${idx * 0.07}s`;
+
+    const recoItems = r.combo.map(x => `
+      <div class="reco-item">
+        <div class="reco-dot"></div>
+        <span>Reduce <strong>${x.name}</strong> usage</span>
+        <span class="reco-hrs">−${x.hrs} hrs/mo</span>
+      </div>
+    `).join('');
+
+    card.innerHTML = `
+      <div class="algo-header">
+        <div>
+          <div class="algo-name">${r.name}</div>
+          <div class="algo-desc">${algoDescs[r.name] || ''}</div>
+        </div>
+        <div class="algo-savings">
+          <div class="savings-label">You Save</div>
+          <div class="savings-amount">₹${Math.round(r.moneySaved).toLocaleString()}</div>
+        </div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="s-label">Target Units</div>
+          <div class="s-val">${r.target}</div>
+        </div>
+        <div class="stat-box">
+          <div class="s-label">Units Saved</div>
+          <div class="s-val purple">${r.saved}</div>
+        </div>
+        <div class="stat-box">
+          <div class="s-label">New Bill</div>
+          <div class="s-val green">₹${Math.round(r.after).toLocaleString()}</div>
+        </div>
+      </div>
+      <div class="reco-title">Recommended reductions</div>
+      <div class="reco-list">${recoItems}</div>
+    `;
+
+    algoGrid.appendChild(card);
+  });
+
+  const result = document.getElementById('result');
+  result.classList.add('visible');
+  result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+renderDevices();
+</script>
+</body>
+</html>
