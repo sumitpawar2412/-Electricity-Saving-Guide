@@ -131,7 +131,7 @@ This project demonstrates:
 
 ## 👨‍💻 Author
 
-**Chaitanya Mylapalli**
+Sumit Pawar
 
 ---
 
